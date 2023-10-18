@@ -8,7 +8,10 @@ curl -fsSL https://get.docker.com | sh
 ```
 git clone https://github.com/Thaomtam/docker-xray
 ```
-
+## Build docker image
+```
+docker build -t docker-xray .
+```
 
 ## Start a container
 
