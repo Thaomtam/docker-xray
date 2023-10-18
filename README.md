@@ -1,70 +1,183 @@
-## Xray Docker Image by Teddysun
-
-[Xray][1] is a platform for building proxies to bypass network restrictions.
-
-It secures your network connections and thus protects your privacy.
-
-Docker images are built for quick deployment in various computing cloud providers.
-
-For more information on docker and containerization technologies, refer to [official document][2].
-
-## Prepare the host
-
-If you need to install docker by yourself, follow the [official installation guide][3].
 
 ## Pull the image
 
-```bash
-$ docker pull teddysun/xray
+```
+git clone https://github.com/Thaomtam/docker-xray
 ```
 
-This pulls the latest release of Xray.
-
-It can be found at [Docker Hub][4].
 
 ## Start a container
 
-You **must create a configuration file**  `/etc/xray/config.json` in host at first:
+```
+mkdir -p /etc/xray
+```
 
 ```
-$ mkdir -p /etc/xray
+/etc/xray/config.json
 ```
 
 A sample in JSON like below:
 
 ```
+cat << EOF > /etc/xray/config.json
 {
-  "inbounds": [{
-    "port": 9000,
-    "protocol": "vmess",
-    "settings": {
-      "clients": [
-        {
-          "id": "1eb6e917-774b-4a84-aff6-b058577c60a5",
-          "level": 1,
-          "alterId": 64
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "listen": "0.0.0.0",
+      "port": 443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "thoi-tiet-openwrt",
+            "flow": "xtls-rprx-vision"
+          }
+        ],
+        "decryption": "none",
+        "fallbacks": [
+          {
+            "dest": "8004",
+            "xver": 1
+          },
+          {
+            "dest": "8005",
+            "xver": 1
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "dest": "1.1.1.1:443",
+          "serverNames": [
+            "lienquan.garena.vn",
+            "m.tiktok.com"
+          ],
+          "privateKey": "sELUHVtMZVXnBVNLOJYOR9NdpZbR7QVjS5b9X0F6iGU",
+          "shortIds": [
+            "e9455277471d0a78"
+          ]
         }
-      ]
+      }
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 8004,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "thoi-tiet-openwrt"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "h2",
+        "sockopt": {
+          "acceptProxyProtocol": true
+        }
+      }
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 8005,
+      "protocol": "trojan",
+      "settings": {
+        "clients": [
+          {
+            "password": "thoi-tiet-openwrt"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "sockopt": {
+          "acceptProxyProtocol": true
+        }
+      }
+    },
+	   {
+      "listen": "0.0.0.0",
+      "port": 80,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "thoi-tiet-openwrt",
+            "flow": "xtls-rprx-vision"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "dest": "1.1.1.1:443",
+          "serverNames": [
+            "lienquan.garena.vn",
+            "m.tiktok.com"
+          ],
+          "privateKey": "sELUHVtMZVXnBVNLOJYOR9NdpZbR7QVjS5b9X0F6iGU",
+          "shortIds": [
+            "e9455277471d0a78"
+          ]
+        }
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 16557,
+      "protocol": "socks",
+      "settings": {
+        "auth": "password",
+        "accounts": [
+          {
+            "user": "admin",
+            "pass": "admin123"
+          }
+        ],
+        "udp": true,
+        "ip": "127.0.0.1"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      }
     }
-  }],
-  "outbounds": [{
-    "protocol": "freedom",
-    "settings": {}
-  }]
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block"
+    }
+  ],
+  "policy": {
+    "levels": {
+      "0": {
+        "handshake": 2,
+        "connIdle": 120
+      }
+    }
+  }
 }
+EOF
 ```
 
-Or generate a configuration file online by [https://tools.sprov.xyz/v2ray/](https://tools.sprov.xyz/v2ray/)
+#RUN
 
-There is an example to start a container that listen on port `9000`, run as a Xray server like below:
-
-```bash
-$ docker run -d -p 9000:9000 --name xray --restart=always -v /etc/xray:/etc/xray teddysun/xray
+```
+docker run -d -p443:443 -p80:80 -p16557:16557 -p8004:8004 -p8005:8005 --name docker-xray --restart=always -v /etc/xray:/etc/xray docker-xray
 ```
 
 **Warning**: The port number must be same as configuration and opened in firewall.
-
-[1]: https://github.com/XTLS/Xray-core
-[2]: https://docs.docker.com/
-[3]: https://docs.docker.com/install/
-[4]: https://hub.docker.com/r/teddysun/xray/
