@@ -2,7 +2,7 @@
 #
 # This is a Shell script for xray based alpine with Docker image
 # 
-# Copyright (C) 2019 - 2020 Teddysun <i@teddysun.com>
+# Copyright (C) 2023 Thaomtam
 #
 # Reference URL:
 # https://github.com/XTLS/Xray-core
