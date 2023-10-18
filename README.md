@@ -1,3 +1,7 @@
+## Install docker
+```
+curl -fsSL https://get.docker.com | sh
+```
 
 ## Clone the Project Repository:
 
