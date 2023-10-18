@@ -1,5 +1,5 @@
 
-## Pull the image
+## Clone the Project Repository:
 
 ```
 git clone https://github.com/Thaomtam/docker-xray
@@ -16,7 +16,7 @@ mkdir -p /etc/xray
 /etc/xray/config.json
 ```
 
-A sample in JSON like below:
+## Mẫu
 
 ```
 cat << EOF > /etc/xray/config.json
@@ -174,10 +174,10 @@ cat << EOF > /etc/xray/config.json
 EOF
 ```
 
-#RUN
+## RUN
 
 ```
 docker run -d -p443:443 -p80:80 -p16557:16557 -p8004:8004 -p8005:8005 --name docker-xray --restart=always -v /etc/xray:/etc/xray docker-xray
 ```
 
-**Warning**: The port number must be same as configuration and opened in firewall.
+**Warning**: Hàng không free
