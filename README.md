@@ -6,7 +6,7 @@ curl -fsSL https://get.docker.com | sh
 ## Clone the Project Repository:
 
 ```
-git clone https://github.com/Thaomtam/docker-xray
+git clone https://github.com/Thaomtam/docker-xray && cd docker-xray
 ```
 ## Build docker image
 ```
