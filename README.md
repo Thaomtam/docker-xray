@@ -44,8 +44,11 @@ docker rm -f docker-xray
 ```
 cat << EOF > /etc/xray/config.json
 {
-  "log": {
-    "loglevel": "warning"
+  "dns": {
+    "servers": [
+      "1.1.1.1",
+      "1.0.0.1"
+    ]
   },
   "inbounds": [
     {
@@ -185,13 +188,17 @@ cat << EOF > /etc/xray/config.json
       "tag": "block"
     }
   ],
-  "policy": {
-    "levels": {
-      "0": {
-        "handshake": 2,
-        "connIdle": 120
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "ip": [
+          "geoip:private"
+        ],
+        "outboundTag": "block"
       }
-    }
+    ]
   }
 }
 EOF
