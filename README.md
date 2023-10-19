@@ -22,6 +22,10 @@ mkdir -p /etc/xray
 ```
 /etc/xray/config.json
 ```
+## Xem quy trình Xray đang sử dụng % CPU :
+```
+docker exec -it docker-xray ps
+```
 ## Status :
 ```
 docker ps -a | grep docker-xray
