@@ -191,19 +191,7 @@ cat << EOF > /etc/xray/config.json
       "protocol": "blackhole",
       "tag": "block"
     }
-  ],
-  "routing": {
-    "domainStrategy": "IPIfNonMatch",
-    "rules": [
-      {
-        "type": "field",
-        "ip": [
-          "geoip:private"
-        ],
-        "outboundTag": "block"
-      }
-    ]
-  }
+  ]
 }
 EOF
 ```
