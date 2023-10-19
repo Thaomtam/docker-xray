@@ -22,6 +22,22 @@ mkdir -p /etc/xray
 ```
 /etc/xray/config.json
 ```
+## Status :
+```
+docker ps -a | grep docker-xray
+```
+## Start :
+```
+docker start docker-xray
+```
+## Stop :
+```
+docker stop docker-xray
+```
+## Remove :
+```
+docker rm -f docker-xray
+```
 
 ## Mẫu
 
